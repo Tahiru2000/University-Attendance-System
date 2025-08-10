@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Open Attendance Session</h2>
+
+  <form method="post" id="session-form">
+    {% csrf_token %}
+
+    <div class="form-group mb-3">
+      {{ form.course.label_tag }}
+      {{ form.course }}
+    </div>
+
+    <div class="form-group mb-3">
+      {{ form.latitude.label_tag }}
+      {{ form.latitude }}
+    </div>
+
+    <div class="form-group mb-3">
+      {{ form.longitude.label_tag }}
+      {{ form.longitude }}
+    </div>
+
+    <div class="form-group mb-3">
+      {{ form.allowed_distance.label_tag }}
+      {{ form.allowed_distance }}
+    </div>
+
+    <div class="form-group mb-3">
+      {{ form.end_time.label_tag }}
+      {{ form.end_time }}
+    </div>
+
+    <button type="submit" class="btn btn-success">Start Session</button>
+    <a href="{% url 'lecturer_dashboard' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+
+  <p id="location-status" class="mt-3 text-muted"></p>
+</div>
+
+<script>
+  // Wait for the DOM to load
+  document.addEventListener('DOMContentLoaded', () => {
+    const latitudeInput = document.getElementById("id_latitude");
+    const longitudeInput = document.getElementById("id_longitude");
+    const locationStatus = document.getElementById("location-status");
+
+    // Try to get the current location
+    if (navigator.geolocation) {
+      locationStatus.textContent = "Detecting your location...";
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          latitudeInput.value = position.coords.latitude.toFixed(6);
+          longitudeInput.value = position.coords.longitude.toFixed(6);
+          locationStatus.textContent = "Location detected ✔";
+        },
+        (error) => {
+          locationStatus.textContent = "Unable to retrieve location: " + error.message;
+        }
+      );
+    } else {
+      locationStatus.textContent = "Geolocation is not supported by your browser.";
+    }
+  });
+</script>
+{% endblock %}
+

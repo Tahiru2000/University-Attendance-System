@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: url("{% static 'images/u.jpeg' %}") no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+  }
+
+  .navbar {
+    background-color: rgba(0, 47, 108, 0.9);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideDown 1s ease-in-out;
+  }
+
+  .navbar h1 {
+    font-size: 1.8rem;
+    color: #fff;
+    margin: 0;
+  }
+
+  .navbar a {
+    color: #fff;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .attendance-container {
+    padding: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    animation: fadeIn 1.5s ease-in;
+  }
+
+  .welcome-section {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .card {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    backdrop-filter: blur(8px);
+  }
+
+  .card h3, .card h2 {
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+
+  .course-list, .nav-links {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .course-list li, .nav-links li {
+    margin: 0.5rem 0;
+  }
+
+  .nav-links a, .course-list a {
+    color: #ffd700;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a:hover, .course-list a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(-100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+
+<!-- Navigation -->
+<div class="navbar">
+  <h1>UBIDS Attendance System</h1>
+  <div>
+    <a href="{% url 'student_register' %}">Register</a>
+    <a href="{% url 'student_login' %}">Login</a>
+    <a href="{% url 'lecturer_register' %}">Lecturer Login</a>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="attendance-container">
+  <div class="welcome-section">
+    <h2>Welcome to the UBIDS Attendance System</h2>
+    <p>Please register first to mark attendance. If already registered, proceed to mark attendance.</p>
+  </div>
+
+  <div class="card">
+    <h3>Navigation</h3>
+    <ul class="nav-links">
+      <li><a href="{% url 'student_register' %}">Register Student</a></li>
+      <li><a href="{% url 'lecturer_dashboard' %}">Lecturer Dashboard</a></li>
+      <li><a href="{% url 'hod_dashboard' %}">HOD Dashboard</a></li>
+      <li><a href="{% url 'student_login' %}">Login</a></li>
+    </ul>
+  </div>
+
+  {% if user.is_authenticated and user.student %}
+    <div class="card">
+      <h2>Student Dashboard</h2>
+      <p class="welcome-user">Welcome, {{ user.username }}</p>
+      <h3>Your Courses</h3>
+      <ul class="course-list">
+        {% for course in courses %}
+          <li>
+            {{ course.name }} ({{ course.code }}) –
+            <a href="{% url 'mark_attendance' user.student.student_id course.code %}">Mark Attendance</a>
+          </li>
+        {% empty %}
+          <li>No courses assigned yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% else %}
+    <div class="card">
+      <h3>Please log in as a student to see your courses and mark attendance.</h3>
+      <p><a href="{% url 'student_login' %}" class="nav-links">Go to Student Login</a></p>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  &copy; {{ now|date:"Y" }} University for Business and Integrated Development Studies (UBIDS) Attendance System
+</div>
+{% endblock %}
+
+
+

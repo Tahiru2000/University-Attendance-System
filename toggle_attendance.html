@@ -1,0 +1,12 @@
+{% load static%}
+<!-- templates/toggle_attendance.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>Toggle Attendance for {{ course.name }}</h2>
+<p>Status: {{ attendance_status }}</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Toggle</button>
+</form>
+<a href="{% url 'lecturer_dashboard' %}">Back to Dashboard</a>
+{% endblock %}

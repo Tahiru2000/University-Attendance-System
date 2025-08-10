@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% load static%}
+
+
+{% block content %}
+<!-- attendance/templates/attendance/student_register.html -->
+
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background-color: #f8f8f8;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type=text], button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Student Registration</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.student_name.label_tag }}  
+        {{ form.student_name }}
+
+        {{ form.student_id.label_tag }}  
+        {{ form.student_id }}
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+
+</body>
+</html>
+
+{% endblock %}
+

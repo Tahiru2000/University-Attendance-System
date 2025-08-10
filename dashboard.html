@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h2>Lecturer Dashboard</h2>
+  <a href="{% url 'add_course' %}" class="btn btn-primary">Add New Course</a>
+  <a href="{% url 'open_session' %}" class="btn btn-success">Open Attendance Session</a>
+
+  <h3>Your Courses</h3>
+  <ul>
+    {% for course in courses %}
+      <li>{{ course.name }} ({{ course.code }})</li>
+    {% empty %}
+      <li>No courses added yet.</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Attendance Sessions</h3>
+  <ul>
+    {% for session in sessions %}
+      <li>
+        {{ session.course.name }} - {{ session.created_at }}
+        <a href="{% url 'generate_attendance_pdf' session.id %}">Download PDF</a>
+      </li>
+    {% empty %}
+      <li>No sessions found.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+
+
+
+django-q
+Django==4.1.13
+geopy
+xhtml2pdf
+setuptools<81

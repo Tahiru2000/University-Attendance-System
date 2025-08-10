@@ -1,0 +1,54 @@
+{% load static %}
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Mark Attendance </h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" onsubmit="getLocation()">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="student_id" class="form-label">Student ID</label>
+            <input type="text" class="form-control" name="student_id" id="student_id" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="course_code" class="form-label">Course Code</label>
+            <input type="text" class="form-control" name="course_code" id="course_code" required>
+        </div>
+
+        <!-- Hidden inputs for location -->
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
+
+        <button type="submit" class="btn btn-primary">Submit Attendance</button>
+    </form>
+</div>
+
+<script>
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                document.getElementById("latitude").value = position.coords.latitude;
+                document.getElementById("longitude").value = position.coords.longitude;
+            },
+            function(error) {
+                alert("Error getting location. Please allow location access.");
+            }
+        );
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+</script>
+{% endblock %}
+
+
